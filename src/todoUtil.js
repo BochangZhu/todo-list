@@ -1,5 +1,4 @@
-import { add, sub} from 'date-fns';
-import { lastDayOfISOWeekYearWithOptions } from 'date-fns/fp';
+import { add, sub} from 'date-fns';s
 
 let maxPriority = 0;
 // factory func for creating todoItem

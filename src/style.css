@@ -1,0 +1,22 @@
+:root{
+    --side-bar-font-size: 32px;
+    --green-proj-color: #e0ffcd;
+    --yellow-proj-color: #fdffcd;
+    --orange-proj-color: #ffebbb;
+    --red-proj-color: #ffcab0;
+    --base-font-family: kk, 'Times New Roman', Times, serif;
+}
+
+@font-face {
+    font-family: 'kk';
+    src: url('./asset/kranky-regular.woff2') format('woff2'),
+         url('./asset/kranky-regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.sidebar{
+    display: grid;
+    place-items: center;
+    font-family: var(--base-font-family, 'kk');
+}
