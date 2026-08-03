@@ -5,6 +5,7 @@
     --orange-proj-color: #ffebbb;
     --red-proj-color: #ffcab0;
     --base-font-family: kk, 'Times New Roman', Times, serif;
+
 }
 
 @font-face {
@@ -16,7 +17,42 @@
 }
 
 .sidebar{
-    display: grid;
-    place-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    font-size: var(--side-bar-font-size, 32px);
     font-family: var(--base-font-family, 'kk');
+
+    .projCont{
+        display: grid;
+        grid-auto-rows: calc(85vh / 6);
+        max-height: 85%;
+        overflow-y: auto;
+    }
 }
+
+.mainPanel{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .tdWin{
+        display: grid;
+        grid-auto-rows: calc(85vh / 6);
+        max-height: 85%;
+        overflow-y: auto;
+    }
+
+}
+
+body {
+    display: grid;
+    grid-template-columns: 3fr 7fr;
+
+    width: 100%;
+    height: 100vh;
+
+    overflow: hidden;
+}
+

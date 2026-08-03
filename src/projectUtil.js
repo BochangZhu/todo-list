@@ -1,6 +1,6 @@
 class projectUtil{
     // arr to store all projs
-    static #projectArr = [];
+    static projectArr = [];
 
     // items arr for individual proj
     itemsArr = [];
@@ -9,8 +9,8 @@ class projectUtil{
         this.name = name;
         this.color = color;
 
-        this.id = projectUtil.#projectArr.length;
-        projectUtil.#projectArr.push(this);
+        this.id = projectUtil.projectArr.length;
+        projectUtil.projectArr.push(this);
     }
 
     refreshItems(){
@@ -23,8 +23,12 @@ class projectUtil{
         this.name = newName;
     }
 
-    removeProj(id){
-        projectUtil.#projectArr.splice(id,1);
+    removeProj(){
+        projectUtil.projectArr.splice(this.id,1);
+    }
+
+    addTodoItem(todoObj){
+        this.itemsArr.push(todoObj);
     }
 
 }

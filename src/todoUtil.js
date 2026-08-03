@@ -1,4 +1,4 @@
-import { add, sub} from 'date-fns';s
+import { add, sub} from 'date-fns';
 
 let maxPriority = 0;
 // factory func for creating todoItem
