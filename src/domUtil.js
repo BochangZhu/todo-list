@@ -1,5 +1,6 @@
 import { projectUtil } from "./projectUtil";
 import plusIcon from "./asset/plus-icon.svg";
+import deleteIcon from "./asset/delete-icon.svg";
 // iife create domUtil module
 export const domUtil = (() => {
     function projRefresher(){
@@ -11,9 +12,27 @@ export const domUtil = (() => {
         projectUtil.projArr.forEach(projObj => {
             const temp = document.createElement("div");
             temp.id = projObj.id.toString();
+            temp.className = "projDIV";
             temp.classList.add(projObj.color);
             temp.textContent = projObj.name;
+            temp.setAttribute("selected", "false");
+            temp.addEventListener("mouseenter", () => {
+                const deleteIcon = document.createElement("img");
+                deleteIcon.className = "deleteIcon";
+                deleteIcon.src = deleteIcon;
+                deleteIcon.alt = "Delete project";
+                deleteIcon.addEventListener("click", () => {
+                    // delete current project in the backend
+                    // call projRefresher()
+                });
+                temp.appendChild(deleteIcon);
+            });
+            temp.addEventListener("mouseleave", () => {
+                temp.querySelector(".deleteIcon").remove();
+            });
 
+            // also have event that when clicked, render the todolist in the main panel
+            temp.addEventListener("click", )
             projCont.appendChild(temp);
         });
     }
@@ -29,7 +48,64 @@ export const domUtil = (() => {
         // basic html layout
 
         // dialogs for projBtn and todoBtn
-        
+        const projDialog = document.createElement("dialog");
+        projDialog.className = "projDialog";
+
+        const projForm = document.createElement("form");
+        projForm.method = "dialog";
+        const para = document.createElement("p");
+        para.textContent = "Add project";
+        const input1 = document.createElement("input");
+        input1.type = "text";
+        input1.name = "name";
+        input1.required = true;
+        const label1 = document.createElement("label");
+        label1.textContent = "Name";
+        label1.appendChild(input1);
+        const para1 = document.createElement("p");
+        para1.textContent = "Color";
+        para1.className = "color";
+        projForm.append(para, label1, para1);
+
+        const colorArr = ["blue", "green", "yellow", "orange", "red"];
+        const colorCont = document.createElement("div");
+        colorCont.className = "colorCont";
+        colorArr.forEach(color => {
+            const tempLabel = document.createElement("label");
+            tempLabel.setAttribute("color", color);
+            const tempInput = document.createElement("input");
+            tempInput.setAttribute("color", color); 
+            tempInput.type = "radio";
+            if (color == "blue") {
+                tempInput.checked = true; 
+            }
+            tempLabel.append(tempInput, document.createTextNode(`${color}`));
+            colorCont.appendChild(tempLabel);
+        });
+
+        projForm.appendChild(colorCont);
+
+        const btnCont = document.createElement("div");
+        btnCont.className = "btnCont";
+        const cancel = document.createElement("button");
+        cancel.value = "";
+        cancel.type = "submit";
+        const confirm = document.createElement("button");
+        confirm.value = "confirm";
+        confirm.type = "submit";
+        btnCont.append(cancel, confirm);
+        projForm.appendChild(btnCont);
+        projDialog.appendChild(projForm);
+
+        //
+        const toDoDialog = document.createElement("dialog");
+        toDoDialog.className = "toDoDialog";
+        const toDoForm = document.createElement("form");
+        toDoForm.method = "dialog";
+
+
+
+
         // sidebar
         const sideBar = document.createElement("div");
         sideBar.className = "sideBar";
@@ -44,7 +120,13 @@ export const domUtil = (() => {
         plusIcon.src = plusIcon;
         plusIcon.alt = "Add a new project";
         plusIcon.addEventListener("click", () => {
-            // open dialog
+            projForm.reset();
+            projDialog.showModal();
+        });
+        projDialog.addEventListener("close", () => {
+            if (projDialog.returnValue) {
+                // add a new project
+            }
         });
 
         projBtn.appendChild(plusIcon);

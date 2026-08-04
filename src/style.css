@@ -4,6 +4,7 @@
     --yellow-proj-color: #fdffcd;
     --orange-proj-color: #ffebbb;
     --red-proj-color: #ffcab0;
+    --blue-proj-color: #bbe4e9;
     --base-font-family: kk, 'Times New Roman', Times, serif;
 
 }
@@ -29,6 +30,19 @@
         grid-auto-rows: calc(85vh / 6);
         max-height: 85%;
         overflow-y: auto;
+        .projDIV{
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .deleteIcon{
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 10%;
+                height: 10%;
+            }
+        }
     }
 }
 

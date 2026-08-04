@@ -13,7 +13,7 @@ class projectUtil{
         projectUtil.projectArr.push(this);
     }
 
-    refreshItems(){
+    static refreshItems(){
         this.itemsArr.sort((a, b) => {
             return (a.dueDate.getTime() - b.dueDate.getTime());
         });
