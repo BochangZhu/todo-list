@@ -1,10 +1,15 @@
 :root{
     --side-bar-font-size: 32px;
-    --green-proj-color: #e0ffcd;
-    --yellow-proj-color: #fdffcd;
-    --orange-proj-color: #ffebbb;
-    --red-proj-color: #ffcab0;
-    --blue-proj-color: #bbe4e9;
+    --todo-title-size: 42px;
+    --todo-para-size: 24px;
+
+    --green: #e0ffcd;
+    --yellow: #fdffcd;
+    --orange: #ffebbb;
+    --red: #ffcab0;
+    --blue: #bbe4e9;
+
+
     --base-font-family: kk, 'Times New Roman', Times, serif;
 
 }
@@ -35,12 +40,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--color);
             .deleteIcon{
                 position: absolute;
                 top: 0;
                 right: 0;
                 width: 10%;
                 height: 10%;
+            }
+            &[selected]{
+                color: white;
+                background-color: var(--color);
             }
         }
     }
@@ -56,6 +66,15 @@
         grid-auto-rows: calc(85vh / 6);
         max-height: 85%;
         overflow-y: auto;
+        .todoDIV {
+            display: flex;
+            flex-direction: column;
+            gap: 10%;
+            font-size: var(--todo-para-size);
+            .title {
+                font-size: var(--todo-title-size);
+            }
+        }
     }
 
 }
@@ -68,5 +87,14 @@ body {
     height: 100vh;
 
     overflow: hidden;
+}
+
+.projDialog{
+    .colorRadio {
+        accent-color: var(--color-fill);
+    }
+    .colorLabel{
+        color: var(--color-fill);
+    }
 }
 

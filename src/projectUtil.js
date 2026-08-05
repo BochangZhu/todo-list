@@ -2,6 +2,8 @@ class projectUtil{
     // arr to store all projs
     static projectArr = [];
 
+    static selectedProjID = 0;
+
     // items arr for individual proj
     itemsArr = [];
 
@@ -24,6 +26,9 @@ class projectUtil{
     }
 
     removeProj(){
+        if (this.id == projectUtil.selectedProjID) {
+            projectUtil.selectedProjID -= 1;
+        }
         projectUtil.projectArr.splice(this.id,1);
     }
 
