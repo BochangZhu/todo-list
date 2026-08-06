@@ -3,6 +3,7 @@ import { add, sub} from 'date-fns';
 let maxPriority = 0;
 // factory func for creating todoItem
 function createTodoItem(tit = "No Title", des, due, pri = -1, pos_arr){
+    
     // base properties title, description, dueDate and priority
     let title = tit;
     let description = des;

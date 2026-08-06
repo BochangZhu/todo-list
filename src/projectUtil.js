@@ -7,9 +7,10 @@ class projectUtil{
     // items arr for individual proj
     itemsArr = [];
 
-    constructor(name = "untitled", color = "blue"){
+    constructor(name = "untitled", color = "blue", isDefault = 0){
         this.name = name;
         this.color = color;
+        this.isDefault = isDefault;
 
         this.id = projectUtil.projectArr.length;
         projectUtil.projectArr.push(this);
@@ -30,6 +31,13 @@ class projectUtil{
             projectUtil.selectedProjID -= 1;
         }
         projectUtil.projectArr.splice(this.id,1);
+    }
+
+    static removeProjByID(id){
+        if (id == projectUtil.selectedProjID) {
+            projectUtil.selectedProjID -= 1;
+        }
+        projectUtil.projectArr.splice(id, 1);
     }
 
     addTodoItem(todoObj){

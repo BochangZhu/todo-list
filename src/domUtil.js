@@ -17,24 +17,36 @@ export const domUtil = (() => {
             temp.className = "projDIV";
             temp.setAttribute("style", `--color: var(--${projObj.color})`);
             temp.textContent = projObj.name;
-            temp.addEventListener("mouseenter", () => {
+            // deleteIcon only available for none default project
+            if (!projObj.isDefault) {
                 const deleteIcon = document.createElement("img");
                 deleteIcon.className = "deleteIcon";
                 deleteIcon.src = deleteIcon;
                 deleteIcon.alt = "Delete project";
+                deleteIcon.style.display = "none";
                 deleteIcon.addEventListener("click", () => {
-                    // open delete dialog
-
-                    // delete current project in the backend
-                    projObj.removeProj();
-                    // call projRefresher()
-                    projRefresher();
+                    // personalize & open deleteDialog
+                    const deleteDialog = document.querySelector(".deleteDialog");
+                    deleteDialog.querySelector(".projName").textContent = projObj.name;
+                    deleteDialog.querySelector(".itemsCount").textContent = projObj.itemsArr.length;
+                    // wipes prev confirm btn event Listener
+                    const confirmBtn = deleteDialog.querySelector(".confirm");
+                    const tempClone = confirmBtn.cloneNode(true);
+                    confirmBtn.replaceWith(tempClone);
+                    confirmBtn.addEventListener("click", () => {
+                        deleteDialog.close(projObj.id);
+                    });
+                    // open deleteDialog
+                    deleteDialog.showModal();
                 });
                 temp.appendChild(deleteIcon);
-            });
-            temp.addEventListener("mouseleave", () => {
-                temp.querySelector(".deleteIcon").remove();
-            });
+                temp.addEventListener("mouseenter", () => {
+                    deleteIcon.style.display = "";
+                });
+                temp.addEventListener("mouseleave", () => {
+                    deleteIcon.style.display = "none";
+                });
+            }
 
             // also have event that when clicked, render the todolist in the main panel
             temp.addEventListener("click", () => {
@@ -43,7 +55,7 @@ export const domUtil = (() => {
                     return;
                 }
                 // clear existing attribute
-                projDomArr.forEach(obj => obj.removeAttribute("selected"));
+                [...projCont.children].forEach(obj => obj.removeAttribute("selected"));
                 temp.setAttribute("selected", "");
                 projectUtil.selectedProjID = projObj.id;
                 todoLstRefresher();
@@ -66,7 +78,9 @@ export const domUtil = (() => {
         const currProj = projectUtil.projectArr[projectUtil.selectedProjID];
 
         const todoArr = currProj.itemsArr;
+        // if empty insert some para saying get started by clicking add btn below...
 
+        // else add them
         todoArr.forEach(todoObj => {
             const tempTodo = document.createElement("div");
             tempTodo.className = "todoDIV";
@@ -81,33 +95,35 @@ export const domUtil = (() => {
 
     function domInit(){
         // create a default project
-        const defaultProj = new projectUtil("Default Project");
+        const defaultProj = new projectUtil("Default Project", undefined, 1);
 
-        // dialogs for projBtn and todoBtn
+        // dialogs for projBtn and todoBtn and deleteBtn
 
         // projBtn
         const projDialog = document.createElement("dialog");
         projDialog.className = "projDialog";
 
         const projForm = document.createElement("form");
+        projForm.className = "projForm";
         projForm.method = "dialog";
+
         const para = document.createElement("p");
         para.textContent = "Add project";
+
         const input1 = document.createElement("input");
         input1.type = "text";
         input1.name = "name";
         input1.required = true;
         const label1 = document.createElement("label");
         label1.textContent = "Name";
-        label1.appendChild(input1);
+
         const para1 = document.createElement("p");
         para1.textContent = "Color";
         para1.className = "color";
-        projForm.append(para, label1, para1);
 
-        const colorArr = ["blue", "green", "yellow", "orange", "red"];
-        const colorCont = document.createElement("div");
+        const colorCont = document.createElement("div");        
         colorCont.className = "colorCont";
+        const colorArr = ["blue", "green", "yellow", "orange", "red"];
         colorArr.forEach(color => {
             const tempLabel = document.createElement("label");
             tempLabel.className = "colorLabel";
@@ -127,7 +143,7 @@ export const domUtil = (() => {
             colorCont.appendChild(tempLabel);
         });
 
-        projForm.appendChild(colorCont);
+        projForm.append(para, label1, input1, para1, colorCont);
 
         const btnCont = document.createElement("div");
         btnCont.className = "btnCont";
@@ -147,6 +163,44 @@ export const domUtil = (() => {
         const toDoForm = document.createElement("form");
         toDoForm.method = "dialog";
 
+        // deleteBtn
+        const deletedialog = document.createElement("dialog");
+        deletedialog.className = "deleteDialog";
+
+        const title = document.createElement("div");
+        title.textContent = "Do you really want to delete ";
+        const projName = document.createElement("span");
+        projName.className = "projName";
+        title.appendChild(projName);
+        title.append(" ?");
+
+        const disclaimer = document.createElement("div");   
+        disclaimer.className = "disclaimer";
+        disclaimer.textContent = "Warning: Deleting this project will permanently remove all associated to-do items. Current to-do counts: ";
+        const itemsCount = document.createElement("span");
+        itemsCount.className = "itemsCount";
+        disclaimer.appendChild(itemsCount);
+
+        const cancelBtn = document.createElement("button");
+        cancelBtn.className = "cancel";
+        cancelBtn.addEventListener("click", () => {
+            deletedialog.close("");
+        });
+        const confirmBtn = document.createElement("button");
+        confirmBtn.className = "confirm";
+
+        deletedialog.addEventListener("close", () => {
+            const projID = +deletedialog.returnValue;
+            
+            // if confirm Btn is clicked
+            if (projID) {
+                // delete current project in the backend
+                projectUtil.removeProjByID(projID);
+                // call projRefresher()
+                projRefresher();
+            }
+        })
+        deletedialog.append(title, disclaimer, cancelBtn, confirmBtn);
 
 
 
@@ -159,18 +213,12 @@ export const domUtil = (() => {
 
         const projBtn = document.createElement("div");
         projBtn.className = "projBtn";
-        projBtn.addEventListener("")
         const plusIcon = document.createElement("img");
         plusIcon.src = plusIcon;
         plusIcon.alt = "Add a new project";
         plusIcon.addEventListener("click", () => {
             projForm.reset();
             projDialog.showModal();
-        });
-        projDialog.addEventListener("close", () => {
-            if (projDialog.returnValue) {
-                // add a new project
-            }
         });
 
         projBtn.appendChild(plusIcon);
@@ -197,7 +245,7 @@ export const domUtil = (() => {
 
 
         
-        document.body.append(sideBar, mainPanel);
+        document.body.append(sideBar, mainPanel, projDialog, toDoDialog, deletedialog);
 
         
 
