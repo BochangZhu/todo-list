@@ -4,8 +4,8 @@ class projectUtil{
 
     static selectedProjID = 0;
 
-    // items arr for individual proj
-    itemsArr = [];
+    // items arr (5 priorities)
+    itemsArr = [[],[],[],[],[]];
 
     constructor(name = "untitled", color = "blue", isDefault = 0){
         this.name = name;

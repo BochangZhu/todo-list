@@ -1,4 +1,5 @@
 import { projectUtil } from "./projectUtil";
+import { addHours, addMinutes, addYears, format } from "date-fns";
 import plusIcon from "./asset/plus-icon.svg";
 import deleteIcon from "./asset/delete-icon.svg";
 
@@ -150,9 +151,11 @@ export const domUtil = (() => {
         const cancel = document.createElement("button");
         cancel.value = "";
         cancel.type = "submit";
+        cancel.textContent = "Cancel";
         const confirm = document.createElement("button");
         confirm.value = "confirm";
         confirm.type = "submit";
+        confirm.textContent = "Create!";
         btnCont.append(cancel, confirm);
         projForm.appendChild(btnCont);
         projDialog.appendChild(projForm);
@@ -161,20 +164,72 @@ export const domUtil = (() => {
         const toDoDialog = document.createElement("dialog");
         toDoDialog.className = "toDoDialog";
         const toDoForm = document.createElement("form");
+        toDoForm.className = "toDoForm";
         toDoForm.method = "dialog";
+        const headline = document.createElement("p");
+        headline.textContent = "Add to-do";
+        const titleL = document.createElement("label");
+        titleL.htmlFor = "titleI";
+        const titleI = document.createElement("input");
+        titleI.id = "titleI";
+        titleI.name = "titleI";
+        titleI.type = "text";
+
+        const desL = document.createElement("label");
+        desL.htmlFor = "desI";
+        const desI = document.createElement("input");
+        desI.id = "desI";
+        desI.name = "description";
+        desI.type = "text";
+
+        const dueL = document.createElement("label");
+        dueL.htmlFor = "dueI";
+        const dueI = document.createElement("input");
+        dueI.id = "dueI";
+        dueI.name = "due";
+        dueI.type = "datetime-local";
+        // set min date to be current time
+        dueI.addEventListener("focus", () => {
+            dueI.min = format(addMinutes(new Date(), 1), "yyyy-MM-dd'T'HH:mm");
+            dueI.max = format(addYears(new Date(), 100), "yyyy-MM-dd'T'HH:mm");
+        });
+
+        const priL = document.createElement("label");
+        priL.htmlFor = "priI";
+        const priI = document.createElement("input");
+        priI.id = "priI";
+        priI.name = "priI";
+        priI.type = "number";
+        priI.min = "0";
+        priI.max = "5";
+        priI.defaultValue = "0";
+        const btnWrap = document.createElement("div");
+        btnWrap.className = "btnCont";
+        const noBtn = document.createElement("button");
+        noBtn.value = "";
+        noBtn.textContent = "cancel";
+        noBtn.type = "submit";
+        const yesBtn = document.createElement("button");
+        yesBtn.value = "submit";
+        yesBtn.type = "submit";
+        yesBtn.textContent = "confirm";
+        btnWrap.append(noBtn, yesBtn);
+        toDoForm.append(headline, titleL, titleI, desL, desI, dueL, dueI, priL, priI, btnWrap);
+        toDoDialog.appendChild(toDoForm);
 
         // deleteBtn
         const deletedialog = document.createElement("dialog");
         deletedialog.className = "deleteDialog";
 
         const title = document.createElement("div");
+        title.className = "title";
         title.textContent = "Do you really want to delete ";
         const projName = document.createElement("span");
         projName.className = "projName";
         title.appendChild(projName);
         title.append(" ?");
 
-        const disclaimer = document.createElement("div");   
+        const disclaimer = document.createElement("div"); 
         disclaimer.className = "disclaimer";
         disclaimer.textContent = "Warning: Deleting this project will permanently remove all associated to-do items. Current to-do counts: ";
         const itemsCount = document.createElement("span");
@@ -199,7 +254,7 @@ export const domUtil = (() => {
                 // call projRefresher()
                 projRefresher();
             }
-        })
+        });
         deletedialog.append(title, disclaimer, cancelBtn, confirmBtn);
 
 
@@ -238,17 +293,19 @@ export const domUtil = (() => {
         const plusIcon1 = document.createElement("img");
         plusIcon1.src = plusIcon;
         plusIcon1.alt = "Add a new Todo";
-
+        const addText = document.createElement("p");
+        addText.className = "addText";
+        addText.textContent = "Add a new task";
         tdBtn.appendChild(plusIcon1);
+        tdBtn.addEventListener("click", () => {
+
+        });
         
         mainPanel.append(todoWindow, tdBtn);
 
 
         
         document.body.append(sideBar, mainPanel, projDialog, toDoDialog, deletedialog);
-
-        
-
 
     };
 
