@@ -1,19 +1,22 @@
 class projectUtil{
     // arr to store all projs
-    static projectArr = [];
+    static projectArr = new Map();
 
-    static selectedProjID = 0;
+    static selectedProjID;
 
-    // items arr (5 priorities)
-    itemsArr = [[],[],[],[],[]];
+    static defaultProjID;
+
+    // items arr (5 priorities maps, 6 for no priotity set)
+    itemsArr = Array.from({length: 6}, () => new Map());
 
     constructor(name = "untitled", color = "blue", isDefault = 0){
         this.name = name;
         this.color = color;
         this.isDefault = isDefault;
 
-        this.id = projectUtil.projectArr.length;
-        projectUtil.projectArr.push(this);
+        // unique id, add to projArr
+        this.id = crypto.randomUUID();
+        projectUtil.projectArr.set(this.id, this);
     }
 
     static refreshItems(){
@@ -26,22 +29,20 @@ class projectUtil{
         this.name = newName;
     }
 
-    removeProj(){
-        if (this.id == projectUtil.selectedProjID) {
-            projectUtil.selectedProjID -= 1;
-        }
-        projectUtil.projectArr.splice(this.id,1);
-    }
-
     static removeProjByID(id){
+        projectUtil.projectArr.delete(id);
+        // fall back to default Proj as seleced
         if (id == projectUtil.selectedProjID) {
-            projectUtil.selectedProjID -= 1;
+            projectUtil.selectedProjID = projectUtil.defaultProjID;
         }
-        projectUtil.projectArr.splice(id, 1);
     }
 
     addTodoItem(todoObj){
-        this.itemsArr.push(todoObj);
+        this.itemsArr[todoObj.priority - 1].set(todoObj.id, todoObj);
+    }
+
+    markProjAsDefault(){
+        projectUtil.defaultProjID = this.id;
     }
 
 }

@@ -2,6 +2,7 @@
     --side-bar-font-size: 32px;
     --todo-title-size: 42px;
     --todo-para-size: 24px;
+    --hint-text-sz: 32px;
  
     --dialog-bs-padding: 12px;
     --dialog-bs-width: 500px;
@@ -21,7 +22,11 @@
     --red: #ffcab0;
     --blue: #bbe4e9;
 
-
+    --p1-col: #cdb4db;
+    --p2-col: #ffc8dd;
+    --p3-col: #ffafcc;  
+    --p4-col: #bde0fe;
+    --p5-col: #a2d2ff;
 
     --base-font-family: 'kk', 'Times New Roman', Times, serif;
 
@@ -93,6 +98,10 @@
             .title {
                 font-size: var(--todo-title-size);
             }
+        }
+        .emptyHint {
+            font-style: italic;
+            font-size: var(--hint-text-sz);
         }
     }
     .tdBtn {

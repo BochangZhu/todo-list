@@ -12,9 +12,9 @@ export const domUtil = (() => {
         projDomArr.forEach(obj => obj.remove());
 
         // append all projs from arr
-        projectUtil.projArr.forEach(projObj => {
+        projectUtil.projectArr.forEach(projObj => {
             const temp = document.createElement("div");
-            temp.id = projObj.id.toString();
+            temp.id = `-${projObj.id}`;
             temp.className = "projDIV";
             temp.setAttribute("style", `--color: var(--${projObj.color})`);
             temp.textContent = projObj.name;
@@ -64,11 +64,9 @@ export const domUtil = (() => {
             projCont.appendChild(temp);
         });
 
-        // click the last selected(or -1 last selected just got deleted)
+        // click the last selected(or default proj last selected just got deleted)
         const id = projectUtil.selectedProjID;
-        projDomArr[id].click();
-        
-
+        projCont.querySelector(`-${id}`).click();
     }
     // need to refine logic of building dynamic todoList interface / time logic
     function todoLstRefresher(){
@@ -76,27 +74,42 @@ export const domUtil = (() => {
         const tdWin = document.querySelector(".tdWin");
         tdWin.replaceChildren();
 
-        const currProj = projectUtil.projectArr[projectUtil.selectedProjID];
+        const currProj = projectUtil.projectArr.get(projectUtil.selectedProjID);
 
         const todoArr = currProj.itemsArr;
-        // if empty insert some para saying get started by clicking add btn below...
 
-        // else add them
-        todoArr.forEach(todoObj => {
-            const tempTodo = document.createElement("div");
-            tempTodo.className = "todoDIV";
+        // if empty insert some para.
+        if (todoArr.every(map => map.size == 0)) {
+            const emptyHint = document.createElement("div");
+            emptyHint.className = "emptyHint";
+            emptyHint.textContent = "Congrats! No tasks left!";
+            tdWin.appendChild(emptyHint);
+        }
+        // >= 1 task exists, create priority containers for them
+        else{
+            for (let i = 0; i < 5; i++) {
+                // skip empty cont
+                if (todoArr[i].length == 0) continue;
+                // priority cont
+                const tempCont = document.createElement("div");
+                tempCont.className = "priCont";
+                // set color theme var
+                tempCont.setAttribute("style", `--theme-color: var(--p${i+1}-col)`);
 
-            const title = document.createElement("p");
-            const statusCont = document.createElement("div");
-            const statusIcon = document.createElement("img");
-            const statusDes = document.createElement("div");
-        });
-        
+                // const title = document.createElement("p");
+                // const statusCont = document.createElement("div");
+                // const statusIcon = document.createElement("img");
+                // const statusDes = document.createElement("div");
+            }
+
+        }
+
     }
 
     function domInit(){
         // create a default project
         const defaultProj = new projectUtil("Default Project", undefined, 1);
+        defaultProj.markProjAsDefault();
 
         // dialogs for projBtn and todoBtn and deleteBtn
 
@@ -159,6 +172,10 @@ export const domUtil = (() => {
         btnCont.append(cancel, confirm);
         projForm.appendChild(btnCont);
         projDialog.appendChild(projForm);
+        // retrieve proj input & update backend / frontend
+        projDialog.addEventListener("close", () => {
+            
+        });
 
         // todoBtn
         const toDoDialog = document.createElement("dialog");
@@ -174,6 +191,7 @@ export const domUtil = (() => {
         titleI.id = "titleI";
         titleI.name = "titleI";
         titleI.type = "text";
+        titleI.required = true;
 
         const desL = document.createElement("label");
         desL.htmlFor = "desI";
@@ -181,6 +199,7 @@ export const domUtil = (() => {
         desI.id = "desI";
         desI.name = "description";
         desI.type = "text";
+        desI.required = true;
 
         const dueL = document.createElement("label");
         dueL.htmlFor = "dueI";
@@ -193,6 +212,7 @@ export const domUtil = (() => {
             dueI.min = format(addMinutes(new Date(), 1), "yyyy-MM-dd'T'HH:mm");
             dueI.max = format(addYears(new Date(), 100), "yyyy-MM-dd'T'HH:mm");
         });
+        dueI.required = true;
 
         const priL = document.createElement("label");
         priL.htmlFor = "priI";
@@ -203,6 +223,7 @@ export const domUtil = (() => {
         priI.min = "0";
         priI.max = "5";
         priI.defaultValue = "0";
+        priI.required = true;
         const btnWrap = document.createElement("div");
         btnWrap.className = "btnCont";
         const noBtn = document.createElement("button");

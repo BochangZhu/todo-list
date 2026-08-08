@@ -1,19 +1,14 @@
 import { add, sub} from 'date-fns';
 
-let maxPriority = 0;
 // factory func for creating todoItem
-function createTodoItem(tit = "No Title", des, due, pri = -1, pos_arr){
+function createTodoItem(tit = "No Title", des, due, pri = 6){
     
     // base properties title, description, dueDate and priority
     let title = tit;
     let description = des;
     let dueDate = due;
     let priority = pri;
-    let uid = pos_arr;
-    
-    if (priority > maxPriority) {
-        maxPriority = priority;
-    }
+    let uid = crypto.randomUUID();
     
     // edit funcs
     function changeTitle(newTitle){
@@ -62,4 +57,4 @@ function createTodoItem(tit = "No Title", des, due, pri = -1, pos_arr){
 
 }
 
-export {createTodoItem, maxPriority};
+export {createTodoItem};
